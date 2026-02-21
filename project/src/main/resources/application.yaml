@@ -20,6 +20,13 @@ short-link:
   stats:
     locale:
       amap-key: 719f1df8024e29029e098b114043a8f3
+  goto-domain:
+    white-list:
+      enable: false
+      names: '百度,B站'
+      details:
+        - baidu.com
+        - bilibili.com
 
 mybatis-plus:
   configuration:
