@@ -89,9 +89,9 @@
               @click="isAddSmallLink = true"
               >创建短链</el-button
             >
-            <el-button style="width: 130px; margin-right: 10px" @click="isAddSmallLinks = true"
+            <!-- <el-button style="width: 130px; margin-right: 10px" @click="isAddSmallLinks = true"
               >批量创建</el-button
-            >
+            > -->
           </div>
         </div>
         <!-- 展示回收站信息 -->
@@ -496,16 +496,7 @@
             :is-single="true"
           ></CreateLink>
         </el-tab-pane>
-        <el-tab-pane>
-          <template #label>
-            <span class="custom-tabs-label">
-              <el-icon>
-                <Connection />
-              </el-icon>
-              <span>随机跳转</span>
-            </span> </template
-          >暂未开发</el-tab-pane
-        >
+
       </el-tabs>
     </el-dialog>
     <!-- 修改短链信息弹框 -->
@@ -520,7 +511,7 @@
       ></EditLink>
     </el-dialog>
     <!-- 批量创建短链弹框 -->
-    <el-dialog @close="afterAddLink" v-model="isAddSmallLinks" title="批量链接">
+    <!-- <el-dialog @close="afterAddLink" v-model="isAddSmallLinks" title="批量链接">
       <CreateLinks
         ref="createLink2Ref"
         :groupInfo="editableTabs"
@@ -528,7 +519,7 @@
         @cancel="cancelAddLink"
         :defaultGid="pageParams.gid"
       ></CreateLinks>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
