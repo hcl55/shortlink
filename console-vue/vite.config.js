@@ -13,13 +13,13 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api': {
+      '/api/short-link/admin': {
         target: 'http://127.0.0.1:8002',
-        changeOrigin: true,
-        ws: true,
-        pathRewrite: {
-          '^/api': '/api'
-        }
+        changeOrigin: true
+      },
+      '/api/short-link/project': {
+        target: 'http://127.0.0.1:8001',
+        changeOrigin: true
       }
     }
   }

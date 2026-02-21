@@ -12,7 +12,6 @@
     <modules>
         <module>admin</module>
         <module>project</module>
-        <module>gateway</module>
     </modules>
 
     <properties>
