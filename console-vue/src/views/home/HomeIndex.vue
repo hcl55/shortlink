@@ -1,53 +1,35 @@
 <template>
   <div class="common-layout">
-    <el-container>
-      <el-header height="54px" style="padding: 0">
+    <el-container class="main-layout-container">
+      <el-header height="54px" style="padding: 0; z-index: 10;">
         <div class="header">
-          <div @click="toMySpace" class="logo">主页</div>
+          <div @click="toMySpace" class="logo">
+            <span class="logo-text">主页</span>
+          </div>
           <div style="display: flex; align-items: center">
-            <el-dropdown>
-              <div class="block">
+            <el-dropdown trigger="hover">
+              <div class="block user-block">
                 <span
-                    class="name-span"
-                    style="text-decoration: none"
-                >{{username}}</span
-                >
+                  class="name-span"
+                  style="text-decoration: none"
+                >{{username}}</span>
               </div>
               <template #dropdown>
-                <el-dropdown-menu>
+                <el-dropdown-menu class="custom-dropdown">
                   <el-dropdown-item @click="toMine">个人信息</el-dropdown-item>
-                  <el-dropdown-item divided @click="logout">退出</el-dropdown-item>
+                  <el-dropdown-item divided @click="logout" style="color: #f56c6c;">退出系统</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
           </div>
         </div>
       </el-header>
-      <el-main style="padding: 0">
+      
+      <el-main class="main-container">
         <div class="content-box">
           <RouterView class="content-space" />
         </div>
       </el-main>
-      <!-- <el-container>
-        <el-aside width="180px">
-          <el-menu
-            active-text-color="#073372"
-            background-color="#0e5782"
-            class="el-menu-vertical-demo"
-            :default-active="getLasteRoute(route.path)"
-            text-color="#fff"
-            @select="handleSelect"
-          >
-            <template v-for="item in menuInfos" :key="item.name">
-              <el-menu-item :index="item.path">
-                <el-icon><icon-menu /></el-icon>
-                <span>{{ item.name }}</span>
-              </el-menu-item>
-            </template>
-          </el-menu></el-aside
-        >
-
-      </el-container> -->
     </el-container>
   </div>
 </template>
@@ -57,21 +39,20 @@ import { ref, getCurrentInstance, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { removeKey, removeUsername, getToken, getUsername } from '@/core/auth.js'
 import { ElMessage } from 'element-plus'
+
 const { proxy } = getCurrentInstance()
 const API = proxy.$API
-// 当当前路径和菜单不匹配时，菜单不会被选中
 const router = useRouter()
 const squareUrl = ref('https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png')
+
 const toMine = () => {
   router.push('/home' + '/account')
 }
-// 登出
+
 const logout = async () => {
   const token = getToken()
   const username = getUsername()
-  // 请求登出的接口
   await API.user.logout({ token, username })
-  // 删除cookies中的token和username
   removeUsername()
   removeKey()
   localStorage.removeItem('token')
@@ -79,17 +60,19 @@ const logout = async () => {
   router.push('/login')
   ElMessage.success('成功退出！')
 }
-// 点击左上方的图片跳转到我的空间
+
 const toMySpace = () => {
   router.push('/home' + '/space')
 }
+
 const username = ref('')
+
 onMounted(async () => {
   const actualUsername = getUsername()
   const res = await API.user.queryUserInfo(actualUsername)
-  // firstName.value = res?.data?.data?.realName?.split('')[0]
   username.value = truncateText(actualUsername, 8)
 })
+
 const extractColorByName = (name) => {
   var temp = []
   temp.push('#')
@@ -99,99 +82,125 @@ const extractColorByName = (name) => {
   return temp.slice(0, 5).join('').slice(0, 4)
 }
 
-// 辅助函数，用于截断文本
 const truncateText = (text, maxLength) => {
   return text.length > maxLength ? text.slice(0, maxLength) + '...' : text
 }
 </script>
 
 <style lang="scss" scoped>
-.el-container {
+.common-layout {
+  width: 100%;
   height: 100vh;
+  overflow: hidden;
+  background-color: #f0f2f5; 
+}
 
-  .el-aside {
-    border: 0;
-    background-color: #0e5782;
-
-    ul {
-      border: 0px;
-    }
-  }
-
-  .el-main {
-    background-color: #e8e8e8;
-  }
+.main-layout-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .header {
-  background-color: #333333;
-  padding: 0 0 0 20px;
   height: 100%;
+  width: 100%;
+  padding: 0 24px;
+  background-color: #24292e;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-sizing: border-box;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 
-  .block {
+  .logo {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: opacity 0.3s;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 16px;
+      background-color: #409eff; 
+      border-radius: 2px;
+      margin-right: 12px;
+    }
+
+    .logo-text {
+      font-size: 16px;
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: 1px;
+      font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    }
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  .user-block {
     cursor: pointer;
     display: flex;
     align-items: center;
-    border: 0px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    transition: all 0.3s;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
   }
 }
 
+.name-span {
+  color: #e5e6eb;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.main-container {
+  flex: 1;
+  padding: 20px !important; 
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
 .content-box {
-  height: calc(100vh - 50px);
-  background-color: white;
+  flex: 1;
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 6px; 
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.04); 
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-space {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 :deep(.el-tooltip__trigger:focus-visible) {
   outline: unset;
 }
 
-.logo {
-  font-size: 15px;
-  font-weight: 600;
-  color: #e8e8e8;
-  font-family: Helvetica, Tahoma, Arial, 'PingFang SC', 'Hiragino Sans GB', 'Heiti SC',
-    'Microsoft YaHei', 'WenQuanYi Micro Hei';
-  // font-family: 'Helvetica Neue', Helvetica, STHeiTi, Arial, sans-serif;
-  cursor: pointer;
-}
-
-.logo:hover {
-  color: #fff;
-}
-
-.link-span {
-  color: #fff;
-  opacity: .6;
-  margin-right: 30px;
-  font-size: 16px;
-  font-family: 'Helvetica Neue', Helvetica, STHeiTi, Arial, sans-serif;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.link-span:hover {
-  text-decoration: underline !important;
-  opacity: 1;
-  color: #fff;
-}
-
-.name-span {
-  color: #fff;
-  opacity: .6;
-  margin-right: 30px;
-  font-size: 12px;
-  font-family: 'Helvetica Neue', Helvetica, STHeiTi, Arial, sans-serif;
-  cursor: pointer;
-  text-decoration: none;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.avatar {
-  transform: translateY(-2px);
+.custom-dropdown .el-dropdown-menu__item {
+  padding: 8px 20px;
+  font-size: 14px;
 }
 </style>
