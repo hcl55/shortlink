@@ -1,8 +1,3 @@
-<!--
- * @Date: 2022-10-26 13:46:41
- * @LastEditTime: 2022-10-26 14:00:56
- * @Description: 列表空状态
--->
 <script setup>
 defineProps({
   text: {

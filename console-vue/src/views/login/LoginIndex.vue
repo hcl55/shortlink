@@ -1,6 +1,6 @@
 <template>
   <div class="login-page">
-    <h1 class="title">短 链 接 平 台</h1>
+    <h1 class="title">短 链 分 享 系 统</h1>
     <div class="login-box">
       <!-- 登录 -->
       <div class="logon" :class="{ hidden: !isLogin }">
@@ -104,8 +104,6 @@
   </div>
   <el-dialog v-model="isWC" title="人机验证" width="40%" :before-close="handleClose">
     <div class="verification-flex">
-      <span>扫码下方二维码，关注后回复：短链接，获取拿个offer-12306在线购票系统人机验证码</span>
-      <img class="img" src="@/assets/png/公众号二维码.png" alt="">
       <el-form class="form" :model="verification" :rules="verificationRule" ref="verificationRef">
         <el-form-item prop="code" label="验证码">
           <el-input v-model="verification.code" />
@@ -171,7 +169,7 @@ const addFormRule = reactive({
       trigger: 'blur'
     }
   ],
-  realNamee: [
+  realName: [
     { required: true, message: '请输姓名', trigger: 'blur' },
   ]
 })
@@ -265,12 +263,6 @@ const login = (formEl) => {
   if (!formEl) return
   formEl.validate(async (valid) => {
     if (valid) {
-      // 当域名为下面这两个时，弹出公众号弹框
-      let domain = window.location.host
-      if (domain === 'shortlink.magestack.cn' || domain === 'shortlink.nageoffer.com') {
-        isWC.value = true
-        return
-      }
       const res1 = await API.user.login(loginForm)
       if (res1.data.code === '0') {
         const token = res1?.data?.data?.token

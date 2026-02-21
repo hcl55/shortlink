@@ -16,7 +16,7 @@ spring:
 
 short-link:
   domain:
-    default: ym.cn:8001
+    default: localhost:8001
   stats:
     locale:
       amap-key: 719f1df8024e29029e098b114043a8f3
